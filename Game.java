@@ -19,7 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+
     /**
      * Create the game and initialise its internal map.
      */
@@ -34,23 +34,34 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
-      
-        // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        
-        // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        Room santo, hospital, barrioHumedo, padreIsla, ordono, renfe, armeria, pinilla, eras, depositos, aeropuerto;
 
-        currentRoom = outside;  // start game outside
+        // create the rooms
+        santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
+        hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
+        barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
+        padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
+        ordono = new Room("Estás en Ordono II. AL norte parece verse algo... ZOOOMBIES");
+        renfe = new Room("Estación de tren.");
+        armeria = new Room("Aquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
+        pinilla = new Room("Barrio Pinilla");
+        eras = new Room ("Eras de Renueva");
+        depositos = new Room ("Depósitos de Agua");
+        aeropuerto = new Room ("GANASTE!");
+        // initialise room exits n-e-s-o
+        santo.setExits(ordono, padreIsla, barrioHumedo, hospital);
+        hospital.setExits(null, santo, null, null);
+        barrioHumedo.setExits(santo, null, null, null);
+        padreIsla.setExits(armeria, depositos, null, santo);
+        ordono.setExits(null, renfe, santo, null);
+        renfe.setExits(null, pinilla, armeria, ordono);
+        armeria.setExits(renfe, null, padreIsla, null);
+        pinilla.setExits(null, null, eras, renfe);
+        eras.setExits(aeropuerto, null, depositos, pinilla);
+        depositos.setExits(eras, null, null, padreIsla);
+        aeropuerto.setExits(null, null, eras, null);
+        
+        currentRoom = santo;  // start game outside
     }
 
     /**
@@ -62,7 +73,7 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
