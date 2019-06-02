@@ -34,10 +34,11 @@ public class Game
      */
     private void createRooms()
     {
-        Room santo, hospital, barrioHumedo, padreIsla, ordono, renfe, armeria, pinilla, eras, depositos, aeropuerto;
+        Room santo, miCasa, hospital, barrioHumedo, padreIsla, ordono, renfe, armeria, pinilla, eras, depositos, aeropuerto;
 
         // create the rooms
         santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
+        miCasa = new Room("Estas en casa");
         hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
         barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
         padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
@@ -48,18 +49,18 @@ public class Game
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
-        // initialise room exits n-e-s-o
-        santo.setExits(ordono, padreIsla, barrioHumedo, hospital);
-        hospital.setExits(null, santo, null, null);
-        barrioHumedo.setExits(santo, null, null, null);
-        padreIsla.setExits(armeria, depositos, null, santo);
-        ordono.setExits(null, renfe, santo, null);
-        renfe.setExits(null, pinilla, armeria, ordono);
-        armeria.setExits(renfe, null, padreIsla, null);
-        pinilla.setExits(null, null, eras, renfe);
-        eras.setExits(aeropuerto, null, depositos, pinilla);
-        depositos.setExits(eras, null, null, padreIsla);
-        aeropuerto.setExits(null, null, eras, null);
+        // initialise room exits n-e-se-s-o
+        santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital);
+        hospital.setExits(null, santo,null,null, null);
+        barrioHumedo.setExits(santo, null, null, null, null);
+        padreIsla.setExits(armeria, depositos, null, null, santo);
+        ordono.setExits(null, renfe, null, santo, null);
+        renfe.setExits(null, pinilla, eras, armeria, ordono);
+        armeria.setExits(renfe, null, null, padreIsla, null);
+        pinilla.setExits(null, null, null, eras, renfe);
+        eras.setExits(aeropuerto, null, null, depositos, pinilla);
+        depositos.setExits(eras, null, null, null, padreIsla);
+        aeropuerto.setExits(null, null, null, eras, null);
 
         currentRoom = santo;  // start game outside
     }
@@ -162,6 +163,9 @@ public class Game
         if(direction.equals("east")) {
             nextRoom = currentRoom.eastExit;
         }
+        if(direction.equals("southEast")) {
+            nextRoom = currentRoom.southEastExit;
+        }
         if(direction.equals("south")) {
             nextRoom = currentRoom.southExit;
         }
@@ -186,6 +190,9 @@ public class Game
         }
         if(currentRoom.eastExit != null) {
             System.out.print("east ");
+        }
+        if(currentRoom.southEastExit != null) {
+            System.out.print("southEast ");
         }
         if(currentRoom.southExit != null) {
             System.out.print("south ");
