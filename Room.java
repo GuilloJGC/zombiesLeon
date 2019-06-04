@@ -12,16 +12,11 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
+import java.util.HashMap;
 public class Room 
 {
     private String description;
-    private Room northExit;
-    private Room southExit;
-    private Room southEastExit;
-    private Room eastExit;
-    private Room westExit;
-    private Room northWestExit;
-
+    private HashMap <String, Room> salidas;
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -31,6 +26,7 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        salidas = new HashMap<>();
     }
 
     /**
@@ -44,17 +40,17 @@ public class Room
     public void setExits(Room north, Room east, Room southEast, Room south, Room west, Room northWest) 
     {
         if(north != null)
-            northExit = north;
+            salidas.put("north", north);
         if(east != null)
-            eastExit = east;
+            salidas.put("east", east);
         if (southEast != null)
-            southEastExit = southEast;
+            salidas.put("southEast", southEast);
         if(south != null)
-            southExit = south;
+            salidas.put("south", south);
         if(west != null)
-            westExit = west;
+            salidas.put("west", west);
         if(northWest != null)
-            northWestExit = northWest;    
+            salidas.put("northWest", northWest);    
     }
 
     /**
@@ -68,22 +64,22 @@ public class Room
     public Room getExit(String direccion){
         Room habitacion = null;
         if(direccion.equals("north")){
-            habitacion = northExit;
+            habitacion = salidas.get("north");
         }
         if(direccion.equals("south")){
-            habitacion = southExit;
+            habitacion = salidas.get("north");
         }
         if(direccion.equals("east")){
-            habitacion = eastExit;
+            habitacion = salidas.get("east");
         }
         if(direccion.equals("west")){
-            habitacion = westExit;
+            habitacion = salidas.get("west");
         }
         if(direccion.equals("southEast")){
-            habitacion = southEastExit;
+            habitacion = salidas.get("southEast");
         }
         if(direccion.equals("northWest")){
-            habitacion = northWestExit;
+            habitacion = salidas.get("northWest");
         }
         return habitacion;
     }
@@ -96,22 +92,22 @@ public class Room
      */
     public String getExitString(){
         String descripcion = "Exits: ";
-        if (northExit != null){
+        if (salidas.get("north") != null){
             descripcion += "north ";
         }
-        if (southExit != null){
+        if (salidas.get("south") != null){
             descripcion += "south ";
         }
-        if (eastExit != null){
+        if (salidas.get("east") != null){
             descripcion += "east ";
         }
-        if (westExit != null){
+        if (salidas.get("west") != null){
             descripcion += "west ";
         }
-        if (southEastExit != null){
+        if (salidas.get("southEast") != null){
             descripcion += "southEast";
         }
-        if (northWestExit != null){
+        if (salidas.get("northWest") != null){
             descripcion += "northWest";
         }
         return descripcion;
