@@ -50,18 +50,18 @@ public class Game
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
         // initialise room exits n-e-se-s-o
-        santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital);
-        hospital.setExits(null, santo,null,null, null);
-        barrioHumedo.setExits(santo, null, null, null, null);
-        padreIsla.setExits(armeria, depositos, null, null, santo);
-        ordono.setExits(null, renfe, null, santo, null);
-        renfe.setExits(null, pinilla, eras, armeria, ordono);
-        armeria.setExits(renfe, null, null, padreIsla, null);
-        pinilla.setExits(null, null, null, eras, renfe);
-        eras.setExits(aeropuerto, null, null, depositos, pinilla);
-        depositos.setExits(eras, null, null, null, padreIsla);
-        aeropuerto.setExits(null, null, null, eras, null);
-
+        santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
+        hospital.setExits(null, santo,null,null, null, null);
+        barrioHumedo.setExits(santo, null, null, null, null, null);
+        padreIsla.setExits(armeria, depositos, null, null, santo, null);
+        ordono.setExits(null, renfe, null, santo, null, null);
+        renfe.setExits(null, pinilla, eras, armeria, ordono, null);
+        armeria.setExits(renfe, null, null, padreIsla, null, null);
+        pinilla.setExits(null, null, null, eras, renfe, null);
+        eras.setExits(aeropuerto, null, null, depositos, pinilla, renfe);
+        depositos.setExits(eras, null, null, null, padreIsla, null);
+        aeropuerto.setExits(null, null, null, eras, null, null);
+        miCasa.setExits(null, null, null, null, null, santo);
         currentRoom = santo;  // start game outside
     }
 

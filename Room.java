@@ -20,6 +20,7 @@ public class Room
     private Room southEastExit;
     private Room eastExit;
     private Room westExit;
+    private Room northWestExit;
 
     /**
      * Create a room described "description". Initially, it has
@@ -40,7 +41,7 @@ public class Room
      * @param south The south exit.
      * @param west The west exit.
      */
-    public void setExits(Room north, Room east, Room southEast, Room south, Room west) 
+    public void setExits(Room north, Room east, Room southEast, Room south, Room west, Room northWest) 
     {
         if(north != null)
             northExit = north;
@@ -52,6 +53,8 @@ public class Room
             southExit = south;
         if(west != null)
             westExit = west;
+        if(northWest != null)
+            northWestExit = northWest;    
     }
 
     /**
@@ -61,7 +64,7 @@ public class Room
     {
         return description;
     }
-    
+
     public Room getExit(String direccion){
         Room habitacion = null;
         if(direccion.equals("north")){
@@ -79,9 +82,13 @@ public class Room
         if(direccion.equals("southEast")){
             habitacion = southEastExit;
         }
+        if(direccion.equals("northWest")){
+            habitacion = northWestExit;
+        }
         return habitacion;
     }
-        /**
+
+    /**
      * Devuelve la información de las salidas existentes
      * Por ejemplo: "Exits: north east west"
      *
@@ -92,17 +99,20 @@ public class Room
         if (northExit != null){
             descripcion += "north ";
         }
-          if (southExit != null){
+        if (southExit != null){
             descripcion += "south ";
         }
-          if (eastExit != null){
+        if (eastExit != null){
             descripcion += "east ";
         }
-          if (westExit != null){
+        if (westExit != null){
             descripcion += "west ";
         }
-          if (southEastExit != null){
+        if (southEastExit != null){
             descripcion += "southEast";
+        }
+        if (northWestExit != null){
+            descripcion += "northWest";
         }
         return descripcion;
     }
