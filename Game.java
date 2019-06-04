@@ -93,7 +93,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        lugarActual();
+        printLocationInfo();
         System.out.println();
     }
 
@@ -152,56 +152,24 @@ public class Game
             System.out.println("Go where?");
             return;
         }
-
         String direction = command.getSecondWord();
-
         // Try to leave current room.
-        Room nextRoom = null;
-        if(direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("southEast")) {
-            nextRoom = currentRoom.southEastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
-        }
-
+        Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
         else {
             currentRoom = nextRoom;
-            lugarActual();
+            printLocationInfo();
         }
     }
 
-    private void lugarActual()
-    {    System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("Exits: ");
-        if(currentRoom.northExit != null) {
-            System.out.print("north ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("east ");
-        }
-        if(currentRoom.southEastExit != null) {
-            System.out.print("southEast ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("south ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("west ");
-        }
+    private void printLocationInfo()
+    {   System.out.println("You are " + currentRoom.getDescription());
+        System.out.print(currentRoom.getExitString());
         System.out.println();
     }
+
 
     /** 
      * "Quit" was entered. Check the rest of the command to see
