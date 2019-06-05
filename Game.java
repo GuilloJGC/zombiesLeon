@@ -49,20 +49,65 @@ public class Game
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
-        // initialise room exits n-e-se-s-o
-        santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
-        hospital.setExits(null, santo,null,null, null, null);
-        barrioHumedo.setExits(santo, null, null, null, null, null);
-        padreIsla.setExits(armeria, depositos, null, null, santo, null);
-        ordono.setExits(null, renfe, null, santo, null, null);
-        renfe.setExits(null, pinilla, eras, armeria, ordono, null);
-        armeria.setExits(renfe, null, null, padreIsla, null, null);
-        pinilla.setExits(null, null, null, eras, renfe, null);
-        eras.setExits(aeropuerto, null, null, depositos, pinilla, renfe);
-        depositos.setExits(eras, null, null, null, padreIsla, null);
-        aeropuerto.setExits(null, null, null, eras, null, null);
-        miCasa.setExits(null, null, null, null, null, santo);
+        
         currentRoom = santo;  // start game outside
+        
+        santo.setExit("north", ordono);
+        santo.setExit("east", padreIsla);
+        santo.setExit("southEast", miCasa);
+        santo.setExit("south", barrioHumedo);
+        santo.setExit("west", hospital);
+        
+        hospital.setExit("east", santo);
+        
+        barrioHumedo.setExit("north", santo);
+        
+        padreIsla.setExit("west", santo);
+        padreIsla.setExit("north", armeria);
+        padreIsla.setExit("east", depositos);
+        padreIsla.setExit("HOME", miCasa);
+        
+        ordono.setExit("east", renfe);
+        ordono.setExit("south", santo);
+        ordono.setExit("HOME", miCasa);
+        
+        renfe.setExit("east", pinilla);
+        renfe.setExit("south", armeria);
+        renfe.setExit("west", ordono);
+        renfe.setExit("southWest", eras);
+        
+        armeria.setExit("north", renfe);
+        armeria.setExit("south", padreIsla);
+        
+        pinilla.setExit("west", renfe);
+        pinilla.setExit("south", eras);
+        pinilla.setExit("HOME", miCasa);
+        
+        eras.setExit("north", aeropuerto);
+        eras.setExit("south", depositos);
+        eras.setExit("west", pinilla);
+        eras.setExit("northWest", renfe);
+        
+        depositos.setExit("north", eras);
+        depositos.setExit("west", padreIsla);
+        
+        aeropuerto.setExit("south", eras);
+        
+        miCasa.setExit("northWest", santo);
+        // initialise room exits n-e-se-s-o-no
+        // santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
+        // hospital.setExits(null, santo,null,null, null, null);
+        // barrioHumedo.setExits(santo, null, null, null, null, null);
+        // padreIsla.setExits(armeria, depositos, null, null, santo, null);
+        // ordono.setExits(null, renfe, null, santo, null, null);
+        // renfe.setExits(null, pinilla, eras, armeria, ordono, null);
+        // armeria.setExits(renfe, null, null, padreIsla, null, null);
+        // pinilla.setExits(null, null, null, eras, renfe, null);
+        // eras.setExits(aeropuerto, null, null, depositos, pinilla, renfe);
+        // depositos.setExits(eras, null, null, null, padreIsla, null);
+        // aeropuerto.setExits(null, null, null, eras, null, null);
+        // miCasa.setExits(null, null, null, null, null, santo);
+        // currentRoom = santo;  // start game outside
     }
 
     /**
