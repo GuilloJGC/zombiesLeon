@@ -49,50 +49,50 @@ public class Game
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
-        
+
         currentRoom = santo;  // start game outside
-        
+
         santo.setExit("north", ordono);
         santo.setExit("east", padreIsla);
         santo.setExit("southEast", miCasa);
         santo.setExit("south", barrioHumedo);
         santo.setExit("west", hospital);
-        
+
         hospital.setExit("east", santo);
-        
+
         barrioHumedo.setExit("north", santo);
-        
+
         padreIsla.setExit("west", santo);
         padreIsla.setExit("north", armeria);
         padreIsla.setExit("east", depositos);
         padreIsla.setExit("HOME", miCasa);
-        
+
         ordono.setExit("east", renfe);
         ordono.setExit("south", santo);
         ordono.setExit("HOME", miCasa);
-        
+
         renfe.setExit("east", pinilla);
         renfe.setExit("south", armeria);
         renfe.setExit("west", ordono);
         renfe.setExit("southWest", eras);
-        
+
         armeria.setExit("north", renfe);
         armeria.setExit("south", padreIsla);
-        
+
         pinilla.setExit("west", renfe);
         pinilla.setExit("south", eras);
         pinilla.setExit("HOME", miCasa);
-        
+
         eras.setExit("north", aeropuerto);
         eras.setExit("south", depositos);
         eras.setExit("west", pinilla);
         eras.setExit("northWest", renfe);
-        
+
         depositos.setExit("north", eras);
         depositos.setExit("west", padreIsla);
-        
+
         aeropuerto.setExit("south", eras);
-        
+
         miCasa.setExit("northWest", santo);
         // initialise room exits n-e-se-s-o-no
         // santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
@@ -163,6 +163,9 @@ public class Game
         else if (commandWord.equals("go")) {
             goRoom(command);
         }
+        else if (commandWord.equals("look")) {	
+            look();
+        }
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
@@ -213,9 +216,12 @@ public class Game
     {  
         System.out.println(currentRoom.getLongDescription());
         System.out.println();
-        
+
     }
 
+    private void look() {	
+        System.out.println(currentRoom.getLongDescription());
+    }
 
     /** 
      * "Quit" was entered. Check the rest of the command to see
