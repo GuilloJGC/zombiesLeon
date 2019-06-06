@@ -38,7 +38,6 @@ public class Parser
         String inputLine;   // will hold the full input line
         String word1 = null;
         String word2 = null;
-
         System.out.print("> ");     // print prompt
 
         inputLine = reader.nextLine();
@@ -46,7 +45,7 @@ public class Parser
         // Find up to two words on the line.
         Scanner tokenizer = new Scanner(inputLine);
         if(tokenizer.hasNext()) {
-            word1 = tokenizer.next();      // get first word
+            word1 = tokenizer.next(); 
             if(tokenizer.hasNext()) {
                 word2 = tokenizer.next();      // get second word
                 // note: we just ignore the rest of the input line.
@@ -66,7 +65,7 @@ public class Parser
     /** 
      * Imprime una lista de las palabras de comando validas 
      */
-    public String getCommandList() {	
+    public String getCommandList() {    
         return commands.showAll();
     }
 }

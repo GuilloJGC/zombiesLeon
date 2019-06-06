@@ -14,11 +14,13 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
-
+import java.util.ArrayList;
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
+    private ArrayList<Room> lastRooms;
+    private int cantidadBacks;
 
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +29,9 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        cantidadBacks = 0;
+        lastRooms = new ArrayList <>();
+
     }
 
     /**
@@ -169,7 +174,7 @@ public class Game
         else if (commandWord.equals("go")) {
             goRoom(command);
         }
-        else if (commandWord.equals("look")) {	
+        else if (commandWord.equals("look")) {  
             look();
         }
         else if (commandWord.equals("quit")) {
@@ -177,6 +182,9 @@ public class Game
         }
         else if (commandWord.equals("eat")) {
             System.out.println("You have eaten now and you are not hungry any more");
+        }
+        else if (commandWord.equals("back")){
+            backRoom();
         }
 
         return wantToQuit;
@@ -212,11 +220,26 @@ public class Game
         String direction = command.getSecondWord();
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
+
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
         else {
+            cantidadBacks = 2;
+            lastRooms.add(currentRoom);
             currentRoom = nextRoom;
+            printLocationInfo();
+        }
+    }
+
+    private void backRoom(){
+
+        if (lastRooms == null || cantidadBacks == 0) {
+            System.out.println("Primero tienes que avanzar");
+        }
+        else {
+            cantidadBacks--;
+            currentRoom = lastRooms.get(cantidadBacks);
             printLocationInfo();
         }
     }
@@ -228,7 +251,7 @@ public class Game
 
     }
 
-    private void look() {	
+    private void look() {   
         System.out.println(currentRoom.getLongDescription());
     }
 
