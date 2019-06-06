@@ -14,22 +14,23 @@
  */
 import java.util.HashMap;
 import java.util.Set;
+import java.util.ArrayList;
 public class Room 
 {
     private String description;
     private HashMap <String, Room> salidas;
-    private Item item;
+    private ArrayList <Item> items;
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description, Item item) 
+    public Room(String description) 
     {
         this.description = description;
         salidas = new HashMap<>();
-        this.item = item;
+        items = new ArrayList <> ();
     }
 
     public void setExit(String direccion, Room habitacion){
@@ -63,13 +64,21 @@ public class Room
         }
         return descripcion;
     }
+
+    public void addItem(Item item){
+        items.add(item);
+    }
+
     public String getItemString(){
         String datosItem = "";
-        if(item != null){
+
+        for(Item item : items){
             datosItem += item.getDescripcion() + " " + item.getPeso() + " kg \n";
         }
+
         return datosItem; 
     }
+
     /**
      * Devuelve un texto con la descripcion larga de la habitacion del tipo:
      *     You are in the 'name of room'
