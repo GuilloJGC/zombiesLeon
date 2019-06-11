@@ -15,12 +15,12 @@
  * @version 2011.07.31
  */
 import java.util.ArrayList;
+import java.util.Stack;
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
-    private ArrayList<Room> lastRooms;
-    private int cantidadBacks;
+    private Stack <Room> lastRooms;
 
     /**
      * Create the game and initialise its internal map.
@@ -29,8 +29,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
-        cantidadBacks = 0;
-        lastRooms = new ArrayList <>();
+        lastRooms = new Stack <Room>();
 
     }
 
@@ -225,8 +224,7 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            cantidadBacks = 2;
-            lastRooms.add(currentRoom);
+            lastRooms.push(currentRoom);
             currentRoom = nextRoom;
             printLocationInfo();
         }
@@ -234,12 +232,11 @@ public class Game
 
     private void backRoom(){
 
-        if (lastRooms == null || cantidadBacks == 0) {
+        if (lastRooms.isEmpty()) {
             System.out.println("Primero tienes que avanzar");
         }
         else {
-            cantidadBacks--;
-            currentRoom = lastRooms.get(cantidadBacks);
+            currentRoom = lastRooms.pop();
             printLocationInfo();
         }
     }
