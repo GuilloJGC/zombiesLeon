@@ -19,24 +19,21 @@ import java.util.Stack;
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
-    private Stack <Room> lastRooms;
+    private Player player;
 
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        createRooms();
         parser = new Parser();
-        lastRooms = new Stack <Room>();
-
+        player = new Player (createRooms());
     }
 
     /**
      * Create all the rooms and link their exits together.
      */
-    private void createRooms()
+    private Room createRooms()
     {
         Room santo, miCasa, hospital, barrioHumedo, padreIsla, ordono, renfe, armeria, pinilla, eras, depositos, aeropuerto;
 
@@ -59,8 +56,6 @@ public class Game
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
-
-        currentRoom = santo;  // start game outside
 
         santo.setExit("north", ordono);
         santo.setExit("east", padreIsla);
@@ -104,6 +99,8 @@ public class Game
         aeropuerto.setExit("south", eras);
 
         miCasa.setExit("northWest", santo);
+
+        return santo;
         // initialise room exits n-e-se-s-o-no
         // santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
         // hospital.setExits(null, santo,null,null, null, null);
@@ -148,7 +145,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        printLocationInfo();
+        look();
         System.out.println();
     }
 
@@ -171,7 +168,7 @@ public class Game
             printHelp();
         }
         else if (commandWord.equals("go")) {
-            goRoom(command);
+            player.goRoom(command);
         }
         else if (commandWord.equals("look")) {  
             look();
@@ -183,7 +180,7 @@ public class Game
             System.out.println("You have eaten now and you are not hungry any more");
         }
         else if (commandWord.equals("back")){
-            backRoom();
+            player.backRoom();
         }
 
         return wantToQuit;
@@ -205,51 +202,8 @@ public class Game
         System.out.println(parser.getCommandList());
     }
 
-    /** 
-     * Try to go in one direction. If there is an exit, enter
-     * the new room, otherwise print an error message.
-     */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
-            return;
-        }
-        String direction = command.getSecondWord();
-        // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
-
-        if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            lastRooms.push(currentRoom);
-            currentRoom = nextRoom;
-            printLocationInfo();
-        }
-    }
-
-    private void backRoom(){
-
-        if (lastRooms.isEmpty()) {
-            System.out.println("Primero tienes que avanzar");
-        }
-        else {
-            currentRoom = lastRooms.pop();
-            printLocationInfo();
-        }
-    }
-
-    private void printLocationInfo()
-    {  
-        System.out.println(currentRoom.getLongDescription());
-        System.out.println();
-
-    }
-
     private void look() {   
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.getRoom().getLongDescription());
     }
 
     /** 
