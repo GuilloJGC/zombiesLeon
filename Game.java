@@ -20,8 +20,9 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-    private Stack <Room> lastRooms;
-
+    private Stack<Room> lastRooms;
+    private ArrayList<Item> inventory;
+    private static final int MAX_WEIGHT = 15;
     /**
      * Create the game and initialise its internal map.
      */
@@ -30,6 +31,7 @@ public class Game
         createRooms();
         parser = new Parser();
         lastRooms = new Stack <Room>();
+        inventory = new ArrayList<>();
 
     }
 
@@ -43,19 +45,20 @@ public class Game
         // create the rooms
         santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
         miCasa = new Room("Estas en casa");
-        miCasa.addItem( new Item ("cama", 500));
+        miCasa.addItem("cama", 500, false);
         hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
         barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
-        barrioHumedo.addItem(new Item ("balas", 1));
+        barrioHumedo.addItem("balas", 1, true);
         padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
         ordono = new Room("Estás en Ordono II. AL norte parece verse algo... ZOOOMBIES");
         renfe = new Room("Estación de tren.");
-        renfe.addItem(new Item ("barra metalica", 10));
+        renfe.addItem("barra metalica", 10, true);
+        renfe.addItem("Bate", 3, true);
         armeria = new Room("Aquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
-        armeria.addItem(new Item ("Escopeta", 5));
-        armeria.addItem(new Item ("Pistola", 3));
+        armeria.addItem("Escopeta", 5, true);
+        armeria.addItem("Pistola", 3, true);
         pinilla = new Room("Barrio Pinilla");
-        pinilla.addItem(new Item ("Bate", 3));
+        pinilla.addItem("Bate", 3, true);
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
@@ -185,6 +188,15 @@ public class Game
         else if (commandWord.equals("back")){
             backRoom();
         }
+        else if (commandWord.equals("take")){
+            takeItem(command);
+        }
+        else if (commandWord.equals("items")){
+            printInventoryInfo();
+        }
+        else if (commandWord.equals("drop")){
+            dropItem(command);
+        }
 
         return wantToQuit;
     }
@@ -248,8 +260,103 @@ public class Game
 
     }
 
+    private String getInventoryInfo(){
+        String datosInventario = "";
+
+        if (!inventory.isEmpty()){
+            for (int i = 1; i <= inventory.size(); i++){
+                datosInventario += "Slot #" + i + ": " + inventory.get(i - 1).getDescripcion() +"Peso: "+ inventory.get(i - 1).getPeso() + "kg\n";
+            }
+        }
+        return datosInventario + getTotalWeight() + " kg \n";
+    }
+
+    private void  printInventoryInfo(){
+        System.out.println(getInventoryInfo());
+        System.out.println("El peso máximo es de "+ MAX_WEIGHT + "kg.");
+    }
+
     private void look() {   
         System.out.println(currentRoom.getLongDescription());
+    }
+
+    private void takeItem(Command command) {
+        if(currentRoom.hasItems()){
+            if(!command.hasSecondWord()) {
+                System.out.println("Which one? (1-6)");
+                System.out.println(currentRoom.getItemString());
+                return;
+
+            }
+            Integer idItem = Integer.parseInt(command.getSecondWord());
+            Item selectedItem = currentRoom.getItem(idItem);
+            if (selectedItem == null) {
+                System.out.println("This item doesn't exist!");
+            }
+
+            else {
+                //se comprueba si al coger el nuevo item se sobre pasa el peso maximo.
+                if(checkWeight(selectedItem.getPeso()) && selectedItem.getPickeable()){ 
+                    inventory.add(selectedItem);
+                    currentRoom.removeItem(idItem);
+                }
+                else{
+                    if(!selectedItem.getPickeable()){
+                        System.out.println("This item isn't pickeable!");
+                    }
+                    if(!checkWeight(selectedItem.getPeso()) && selectedItem.getPickeable()){
+                        System.out.println("Llevas demasiado peso como para coger este objeto!!!");
+                    }
+
+                }
+                printInventoryInfo();
+
+            }
+        }
+        else{
+            System.out.println("There are no items in this room!");
+        }
+    }
+
+    private void dropItem(Command command){
+        if(!inventory.isEmpty()){
+            if(!command.hasSecondWord()) {
+                System.out.println("Which one? \n");
+                printInventoryInfo();
+                return;
+            }
+            Integer idItem = Integer.parseInt(command.getSecondWord());
+            if (idItem - 1 >= 0 && (idItem - 1) < (inventory.size())){
+                Item selectedItem = inventory.get(idItem - 1);
+                currentRoom.addItem(selectedItem.getDescripcion(), selectedItem.getPeso(), selectedItem.getPickeable());
+                inventory.remove(idItem - 1);
+                printInventoryInfo();
+            }
+            else {
+                System.out.println("This item isnt in you invetory. \n");
+                System.out.println("This is what you have. \n");
+                printInventoryInfo();
+            }
+        }
+        else {
+            System.out.println("There no items in your invetory. \n");
+        }
+    }
+
+    private int getTotalWeight(){
+        int totalWeight = 0;
+        for(Item item : inventory){
+            totalWeight += item.getPeso();
+        }
+        return totalWeight;
+    }
+
+    private boolean checkWeight(int itemWeight){
+        boolean validWeight = false;
+        if(getTotalWeight() + itemWeight <= MAX_WEIGHT){
+            validWeight = true; 
+        }
+        return validWeight;
     }
 
     /** 
