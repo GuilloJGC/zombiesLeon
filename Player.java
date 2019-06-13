@@ -54,10 +54,16 @@ public class Player
                 datosInventario += "Slot #" + i + ": " + inventory.get(i - 1).getDescripcion() +"Peso: "+ inventory.get(i - 1).getPeso() + "kg\n";
             }
         }
-        return datosInventario;
+        return datosInventario + "\nPeso total: " + getTotalWeight() + " kg"; 
     }
-
-    private void  printInventoryInfo(){
+    private int getTotalWeight(){
+        int totalWeight = 0;
+        for(Item item : inventory){
+            totalWeight += item.getPeso();
+        }
+        return totalWeight;
+    }
+    public void  printInventoryInfo(){
         System.out.println(getInventoryInfo());
 
     }
