@@ -58,7 +58,7 @@ public class Room
      */
     public String getExitString(){
         Set<String> direcciones = salidas.keySet();
-        String descripcion = "Exit: ";
+        String descripcion = "Salidas: ";
 
         for(String direccion : direcciones){
             descripcion += direccion + " ";
@@ -66,12 +66,12 @@ public class Room
         return descripcion;
     }
 
-    public void addItem(String nombre, int peso, boolean pickeable){
+    public void addItem(String nombre, int peso, boolean pickeable, boolean range){
         int newId = 1;
         while (items.containsKey(newId)){
             newId++;
         }
-        Item nuevoItem = new Item (newId, nombre, peso, pickeable);
+        Item nuevoItem = new Item (newId, nombre, peso, pickeable, range);
         items.put(nuevoItem.getId(), nuevoItem);
 
     }

@@ -9,18 +9,21 @@ public class Player
     private Room currentRoom;
     private ArrayList <Item> inventory;
     private int maxWeight;
+    private Item equipedItem;
+    private int damage;
     public Player(Room initialRoom, int maxWeight)
     {
         currentRoom = initialRoom;
         lastRooms = new Stack<>();
         inventory = new ArrayList <Item> ();
         this.maxWeight = maxWeight;
+        damage = 0;
     }
 
     public void takeItem(Command command) {
         if(currentRoom.hasItems()){
             if(!command.hasSecondWord()) {
-                System.out.println("Which one? (1-6)");
+                System.out.println("¿Qué objeto? (Escoge un número)");
                 System.out.println(currentRoom.getItemString());
                 return;
 
@@ -28,7 +31,7 @@ public class Player
             Integer idItem = Integer.parseInt(command.getSecondWord());
             Item selectedItem = currentRoom.getItem(idItem);
             if (selectedItem == null) {
-                System.out.println("This item doesn't exist!");
+                System.out.println("¡Ese item no existe!");
             }
 
             else {
@@ -39,7 +42,7 @@ public class Player
                 }
                 else{
                     if(!selectedItem.isPickeable()){
-                        System.out.println("This item isn't pickeable!");
+                        System.out.println("¡No puedes coger ese item!");
                     }
                     if(!checkWeight(selectedItem.getPeso()) && selectedItem.isPickeable()){
                         System.out.println("Llevas demasiado peso como para coger este objeto!!!");
@@ -51,44 +54,85 @@ public class Player
             }
         }
         else{
-            System.out.println("There are no items in this room!");
+            System.out.println("¡En esta habitación no hay objetos!");
         }
     }
 
     public void dropItem(Command command){
         if(!inventory.isEmpty()){
             if(!command.hasSecondWord()) {
-                System.out.println("Which SLOT do you want to drop? \n");
+                System.out.println("¿Qué SLOT quieres vaciar? \n");
                 printInventoryInfo();
                 return;
             }
             Integer idItem = Integer.parseInt(command.getSecondWord());
             if (idItem - 1 >= 0 && (idItem - 1) < (inventory.size())){
                 Item selectedItem = inventory.get(idItem - 1);
-                currentRoom.addItem(selectedItem.getDescripcion(), selectedItem.getPeso(), selectedItem.isPickeable());
+                currentRoom.addItem(selectedItem.getDescripcion(), selectedItem.getPeso(), selectedItem.isPickeable(), selectedItem.isRanged());
                 inventory.remove(idItem - 1);
                 printInventoryInfo();
             }
             else {
-                System.out.println("This item isnt in you invetory. \n");
-                System.out.println("This is what you have. \n");
+                System.out.println("No existe ese item en tu inventario. \n");
+                System.out.println("Lo que tienes es esto... \n");
                 printInventoryInfo();
             }
         }
         else {
-            System.out.println("There no items in your invetory. \n");
+            System.out.println("No hay ningún item en tu inventario. \n");
+        }
+    }
+
+    public void equipItem(Command command){
+        if(!inventory.isEmpty()){
+            if(!command.hasSecondWord()) {
+                System.out.println("¿Qué SLOT quieres equiparte? \n");
+                printInventoryInfo();
+                return;
+            }
+            Integer idItem = Integer.parseInt(command.getSecondWord());
+            if (idItem - 1 >= 0 && (idItem - 1) < (inventory.size())){
+                Item selectedItem = inventory.get(idItem - 1);
+                if(equipedItem != null){ 
+                    if(checkWeight(equipedItem.getPeso() - selectedItem.getPeso())){
+                        inventory.add(equipedItem);
+                        equipedItem = selectedItem;
+                        inventory.remove(idItem - 1);
+                    }
+                    else{
+                        System.out.println("Llevas demasiado peso como para cargar de nuevo con el objeto equipado!!!");
+                    }
+                }
+                else{
+                    equipedItem = selectedItem;
+                    inventory.remove(idItem - 1);
+                }
+                printInventoryInfo();
+            }
+            else {
+                System.out.println("No existe ese item en tu inventario. \n");
+                System.out.println("Lo que tienes es esto... \n");
+                printInventoryInfo();
+            }
+        }
+        else {
+            System.out.println("No hay ningún item en tu inventario. \n");
         }
     }
 
     private String getInventoryInfo(){
         String datosInventario = "";
-
+        if (equipedItem != null){
+            datosInventario = "Equipado: " + equipedItem.getDescripcion() + "\n" +
+             "Daño: " + equipedItem.getDamage() + "\n" +
+             "Objetos inventario: \n";
+        }
         if (!inventory.isEmpty()){
             for (int i = 1; i <= inventory.size(); i++){
-                datosInventario += "Slot #" + i + ": " + inventory.get(i - 1).getDescripcion() +"Peso: "+ inventory.get(i - 1).getPeso() + "kg\n";
+                datosInventario += "Slot #" + i + ": " + inventory.get(i - 1).getDescripcion() +"  Peso: "+ inventory.get(i - 1).getPeso() + "kg\n";
             }
         }
-        return datosInventario + "\nPeso total: " + getTotalWeight() + " kg"; 
+        return datosInventario + "\nPeso total inventario: " + getTotalWeight() + " kg"; 
     }
 
     private boolean checkWeight(int itemWeight){
@@ -120,7 +164,7 @@ public class Player
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
+            System.out.println("¿Ir a dónde?");
             return;
         }
         String direction = command.getSecondWord();
@@ -128,7 +172,7 @@ public class Player
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("¡Ahí no hay salida!");
         }
         else {
             lastRooms.push(currentRoom);

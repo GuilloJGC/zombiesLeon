@@ -38,21 +38,21 @@ public class Game
         Room santo, miCasa, hospital, barrioHumedo, padreIsla, ordono, renfe, armeria, pinilla, eras, depositos, aeropuerto;
 
         // create the rooms
-        santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
-        miCasa = new Room("Estas en casa");
-        miCasa.addItem("cama", 500, false);
-        hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
+        santo = new Room("Santo Domingo");
+        miCasa = new Room("tu casa");
+        miCasa.addItem("cama", 500, false, false);
+        hospital = new Room("Hospital. \nAquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
         barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
-        barrioHumedo.addItem("balas", 1, true);
-        padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
-        ordono = new Room("Estás en Ordono II. AL norte parece verse algo... ZOOOMBIES");
+        barrioHumedo.addItem("balas", 1, true, false);
+        padreIsla = new Room("Estás en Padre Isla.\n¡Qué ha sido eso!");
+        ordono = new Room("Estás en Ordono II. \n Al norte parece verse algo... ZOOOMBIES");
         renfe = new Room("Estación de tren.");
-        renfe.addItem("barra metalica", 10, true);
-        armeria = new Room("Aquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
-        armeria.addItem("Escopeta", 5, true);
-        armeria.addItem("Pistola", 3, true);
+        renfe.addItem("barra metalica", 10, true, false);
+        armeria = new Room("Armeria. \nAquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
+        armeria.addItem("Escopeta", 5, true, true);
+        armeria.addItem("Pistola", 3, true, true);
         pinilla = new Room("Barrio Pinilla");
-        pinilla.addItem("Bate", 3, true);
+        pinilla.addItem("Bate", 3, true, false);
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
@@ -101,20 +101,7 @@ public class Game
         miCasa.setExit("northWest", santo);
 
         return santo;
-        // initialise room exits n-e-se-s-o-no
-        // santo.setExits(ordono, padreIsla, miCasa, barrioHumedo, hospital, null);
-        // hospital.setExits(null, santo,null,null, null, null);
-        // barrioHumedo.setExits(santo, null, null, null, null, null);
-        // padreIsla.setExits(armeria, depositos, null, null, santo, null);
-        // ordono.setExits(null, renfe, null, santo, null, null);
-        // renfe.setExits(null, pinilla, eras, armeria, ordono, null);
-        // armeria.setExits(renfe, null, null, padreIsla, null, null);
-        // pinilla.setExits(null, null, null, eras, renfe, null);
-        // eras.setExits(aeropuerto, null, null, depositos, pinilla, renfe);
-        // depositos.setExits(eras, null, null, null, padreIsla, null);
-        // aeropuerto.setExits(null, null, null, eras, null, null);
-        // miCasa.setExits(null, null, null, null, null, santo);
-        // currentRoom = santo;  // start game outside
+        
     }
 
     /**
@@ -132,7 +119,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("¿Tanto miedo te dan los ZOOOOMBIEEEESS? ¡Hasta otra, gallina!");
     }
 
     /**
@@ -141,11 +128,12 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type 'help' if you need help.");
+        System.out.println("Debido a un envenenamiento la población de León se está transformando en zombies..."  );
+        System.out.println("...tienes que huir o matar a todos los zombies....");
+        System.out.println("...tú escoges...");
         System.out.println();
         look();
+        printHelp();
         System.out.println();
     }
 
@@ -159,7 +147,7 @@ public class Game
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
+            System.out.println("No entiendo qué quieres decir...");
             return false;
         }
 
@@ -177,7 +165,7 @@ public class Game
             wantToQuit = quit(command);
         }
         else if (commandWord.equals("eat")) {
-            System.out.println("You have eaten now and you are not hungry any more");
+            System.out.println("Commiste y ya no tienes hambre");
         }
         else if (commandWord.equals("back")){
             player.backRoom();
@@ -190,6 +178,9 @@ public class Game
         }
         else if (commandWord.equals("drop")){
             player.dropItem(command);
+        }
+        else if (commandWord.equals("equip")){
+            player.equipItem(command);
         }
 
         return wantToQuit;
@@ -204,10 +195,10 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("Te encuentras cansado, asustado... con ganas de volver a ver a tus seres queridos");
+        System.out.println("...y huir de León.");
         System.out.println();
-        System.out.println("Your command words are:");
+        System.out.println("Tus palabras comando son las siguientes:");
         System.out.println(parser.getCommandList());
     }
 
@@ -223,7 +214,7 @@ public class Game
     private boolean quit(Command command) 
     {
         if(command.hasSecondWord()) {
-            System.out.println("Quit what?");
+            System.out.println("¿Salir, qué? ¿De fiesta?");
             return false;
         }
         else {
