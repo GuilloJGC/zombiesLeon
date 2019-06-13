@@ -15,11 +15,12 @@
 import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Map;
 public class Room 
 {
     private String description;
     private HashMap <String, Room> salidas;
-    private ArrayList <Item> items;
+    private HashMap <Integer, Item> items;
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -30,7 +31,7 @@ public class Room
     {
         this.description = description;
         salidas = new HashMap<>();
-        items = new ArrayList <> ();
+        items = new HashMap <> ();
     }
 
     public void setExit(String direccion, Room habitacion){
@@ -65,17 +66,37 @@ public class Room
         return descripcion;
     }
 
-    public void addItem(Item item){
-        items.add(item);
+    public void addItem(String nombre, int peso){
+        int newId = 1;
+        while (items.containsKey(newId)){
+            newId++;
+        }
+        Item nuevoItem = new Item (newId, nombre, peso);
+        items.put(nuevoItem.getId(), nuevoItem);
+
+    }
+
+    public Item getItem(Integer idItem){
+        return items.get(idItem);
+    }
+
+    public void removeItem(Integer idItem){
+        items.remove(idItem);
+    }
+    
+    public boolean hasItems(){
+        boolean hasIt = false;
+        if(!items.isEmpty()){
+            hasIt = true;
+        }
+        return hasIt;
     }
 
     public String getItemString(){
         String datosItem = "";
-
-        for(Item item : items){
-            datosItem += item.getDescripcion() + " " + item.getPeso() + " kg \n";
+        for(Map.Entry<Integer, Item> item : items.entrySet()){
+            datosItem +=item.getKey() + ". " + item.getValue().getDescripcion() + " " + item.getValue().getPeso() + " kg \n";
         }
-
         return datosItem; 
     }
 

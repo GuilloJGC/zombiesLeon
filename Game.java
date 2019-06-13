@@ -40,19 +40,19 @@ public class Game
         // create the rooms
         santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
         miCasa = new Room("Estas en casa");
-        miCasa.addItem( new Item ("cama", 500));
+        miCasa.addItem("cama", 500);
         hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
         barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
-        barrioHumedo.addItem(new Item ("balas", 1));
+        barrioHumedo.addItem("balas", 1);
         padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
         ordono = new Room("Estás en Ordono II. AL norte parece verse algo... ZOOOMBIES");
         renfe = new Room("Estación de tren.");
-        renfe.addItem(new Item ("barra metalica", 10));
+        renfe.addItem("barra metalica", 10);
         armeria = new Room("Aquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
-        armeria.addItem(new Item ("Escopeta", 5));
-        armeria.addItem(new Item ("Pistola", 3));
+        armeria.addItem("Escopeta", 5);
+        armeria.addItem("Pistola", 3);
         pinilla = new Room("Barrio Pinilla");
-        pinilla.addItem(new Item ("Bate", 3));
+        pinilla.addItem("Bate", 3);
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");
@@ -181,6 +181,9 @@ public class Game
         }
         else if (commandWord.equals("back")){
             player.backRoom();
+        }
+        else if (commandWord.equals("take")){
+            player.takeItem(command);
         }
 
         return wantToQuit;
