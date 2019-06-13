@@ -8,12 +8,13 @@ public class Player
     private Stack<Room> lastRooms;
     private Room currentRoom;
     private ArrayList <Item> inventory;
-
-    public Player(Room initialRoom)
+    private int maxWeight;
+    public Player(Room initialRoom, int maxWeight)
     {
         currentRoom = initialRoom;
         lastRooms = new Stack<>();
         inventory = new ArrayList <Item> ();
+        this.maxWeight = maxWeight;
     }
 
     public void takeItem(Command command) {
@@ -24,21 +25,29 @@ public class Player
                 return;
 
             }
-
             Integer idItem = Integer.parseInt(command.getSecondWord());
             Item selectedItem = currentRoom.getItem(idItem);
             if (selectedItem == null) {
                 System.out.println("This item doesn't exist!");
             }
-            else{
-                if(selectedItem.isPickeable()){
+
+            else {
+                //se comprueba si al coger el nuevo item se sobre pasa el peso maximo.
+                if(checkWeight(selectedItem.getPeso()) && selectedItem.isPickeable()){ 
                     inventory.add(selectedItem);
                     currentRoom.removeItem(idItem);
-                    printInventoryInfo();
                 }
                 else{
-                    System.out.println("This item isn't pickeable!");
+                    if(!selectedItem.isPickeable()){
+                        System.out.println("This item isn't pickeable!");
+                    }
+                    if(!checkWeight(selectedItem.getPeso()) && selectedItem.isPickeable()){
+                        System.out.println("Llevas demasiado peso como para coger este objeto!!!");
+                    }
+
                 }
+                printInventoryInfo();
+
             }
         }
         else{
@@ -49,7 +58,7 @@ public class Player
     public void dropItem(Command command){
         if(!inventory.isEmpty()){
             if(!command.hasSecondWord()) {
-                System.out.println("Which one? \n");
+                System.out.println("Which SLOT do you want to drop? \n");
                 printInventoryInfo();
                 return;
             }
@@ -82,6 +91,14 @@ public class Player
         return datosInventario + "\nPeso total: " + getTotalWeight() + " kg"; 
     }
 
+    private boolean checkWeight(int itemWeight){
+        boolean validWeight = false;
+        if(getTotalWeight() + itemWeight <= maxWeight){
+            validWeight = true; 
+        }
+        return validWeight;
+    }
+
     private int getTotalWeight(){
         int totalWeight = 0;
         for(Item item : inventory){
@@ -92,7 +109,7 @@ public class Player
 
     public void  printInventoryInfo(){
         System.out.println(getInventoryInfo());
-
+        System.out.println("El peso máximo es de "+ maxWeight + "kg.");
     }
 
     /** 

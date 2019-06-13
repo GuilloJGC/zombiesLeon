@@ -20,14 +20,14 @@ public class Game
 {
     private Parser parser;
     private Player player;
-
+    private static final int MAX_WEIGHT = 15;
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
         parser = new Parser();
-        player = new Player (createRooms());
+        player = new Player (createRooms(), MAX_WEIGHT);
     }
 
     /**
