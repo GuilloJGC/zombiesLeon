@@ -107,6 +107,6 @@ public class Room
      * @return Una descripcion de la habitacion incluyendo sus salidas
      */
     public String getLongDescription(){
-        return "Estás en " + description + "\n" + getExitString() +"\n"+ "Items: " + getItemString();
+        return "Estás en " + description + "\n" + getExitString() +"\n"+ "Items: \n" + getItemString();
     }
 }

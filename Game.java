@@ -188,6 +188,9 @@ public class Game
         else if (commandWord.equals("items")){
             player.printInventoryInfo();
         }
+        else if (commandWord.equals("drop")){
+            player.dropItem(command);
+        }
 
         return wantToQuit;
     }

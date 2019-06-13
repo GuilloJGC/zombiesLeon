@@ -46,6 +46,31 @@ public class Player
         }
     }
 
+    public void dropItem(Command command){
+        if(!inventory.isEmpty()){
+            if(!command.hasSecondWord()) {
+                System.out.println("Which one? \n");
+                printInventoryInfo();
+                return;
+            }
+            Integer idItem = Integer.parseInt(command.getSecondWord());
+            if (idItem - 1 >= 0 && (idItem - 1) < (inventory.size())){
+                Item selectedItem = inventory.get(idItem - 1);
+                currentRoom.addItem(selectedItem.getDescripcion(), selectedItem.getPeso(), selectedItem.isPickeable());
+                inventory.remove(idItem - 1);
+                printInventoryInfo();
+            }
+            else {
+                System.out.println("This item isnt in you invetory. \n");
+                System.out.println("This is what you have. \n");
+                printInventoryInfo();
+            }
+        }
+        else {
+            System.out.println("There no items in your invetory. \n");
+        }
+    }
+
     private String getInventoryInfo(){
         String datosInventario = "";
 
@@ -56,6 +81,7 @@ public class Player
         }
         return datosInventario + "\nPeso total: " + getTotalWeight() + " kg"; 
     }
+
     private int getTotalWeight(){
         int totalWeight = 0;
         for(Item item : inventory){
@@ -63,6 +89,7 @@ public class Player
         }
         return totalWeight;
     }
+
     public void  printInventoryInfo(){
         System.out.println(getInventoryInfo());
 
