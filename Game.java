@@ -40,19 +40,19 @@ public class Game
         // create the rooms
         santo = new Room("Debido a un envenenamiento la población de León se está transformando en zombies... tienes que huir o matar a todos los zombies... tú escoges...");
         miCasa = new Room("Estas en casa");
-        miCasa.addItem("cama", 500);
+        miCasa.addItem("cama", 500, false);
         hospital = new Room("Aquí podrás volver y pagar 3 monedas por recuperar las vidas que hayas perdido");
         barrioHumedo = new Room("Aquí podrás recuperar los tiros que hayas (mal)gastado con tu mala suerte");
-        barrioHumedo.addItem("balas", 1);
+        barrioHumedo.addItem("balas", 1, true);
         padreIsla = new Room("Estás en Padre Isla. ¡Qué ha sido eso!");
         ordono = new Room("Estás en Ordono II. AL norte parece verse algo... ZOOOMBIES");
         renfe = new Room("Estación de tren.");
-        renfe.addItem("barra metalica", 10);
+        renfe.addItem("barra metalica", 10, true);
         armeria = new Room("Aquí podrás armarte hasta los dientes... siempre y cuando traigas dinero!");
-        armeria.addItem("Escopeta", 5);
-        armeria.addItem("Pistola", 3);
+        armeria.addItem("Escopeta", 5, true);
+        armeria.addItem("Pistola", 3, true);
         pinilla = new Room("Barrio Pinilla");
-        pinilla.addItem("Bate", 3);
+        pinilla.addItem("Bate", 3, true);
         eras = new Room ("Eras de Renueva");
         depositos = new Room ("Depósitos de Agua");
         aeropuerto = new Room ("GANASTE!");

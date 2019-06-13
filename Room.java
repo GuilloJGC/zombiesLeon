@@ -66,12 +66,12 @@ public class Room
         return descripcion;
     }
 
-    public void addItem(String nombre, int peso){
+    public void addItem(String nombre, int peso, boolean pickeable){
         int newId = 1;
         while (items.containsKey(newId)){
             newId++;
         }
-        Item nuevoItem = new Item (newId, nombre, peso);
+        Item nuevoItem = new Item (newId, nombre, peso, pickeable);
         items.put(nuevoItem.getId(), nuevoItem);
 
     }

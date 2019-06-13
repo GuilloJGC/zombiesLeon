@@ -11,16 +11,22 @@ public class Item
     private Integer id;
     private int peso;
     private String descripcion;
+    private boolean pickeable;
     /**
      * Constructor for objects of class item
      */
-    public Item(Integer id, String descripcion, int peso)
+    public Item(Integer id, String descripcion, int peso, boolean pickeable)
     {
         this.id = id;
         this.descripcion = descripcion;
         this.peso = peso;
+        this.pickeable = pickeable;
     }
 
+    public boolean isPickeable(){
+        return pickeable;
+    }
+    
     public int getPeso(){
         return peso;
     }

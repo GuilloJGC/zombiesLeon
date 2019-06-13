@@ -31,9 +31,14 @@ public class Player
                 System.out.println("This item doesn't exist!");
             }
             else{
-                inventory.add(selectedItem);
-                currentRoom.removeItem(idItem);
-                printInventoryInfo();
+                if(selectedItem.isPickeable()){
+                    inventory.add(selectedItem);
+                    currentRoom.removeItem(idItem);
+                    printInventoryInfo();
+                }
+                else{
+                    System.out.println("This item isn't pickeable!");
+                }
             }
         }
         else{
